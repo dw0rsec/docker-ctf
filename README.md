@@ -2,27 +2,54 @@
 
 ### About docker-ctf
 
-docker-ctf is a Docker container that can be used as a lean VM replacement for hacking. It should be noted that, unlike VMs, the container runs on the kernel of the host system and is only isolated by namespaces and cgroups. docker-ctf is based on a Debian image and has the following tools installed:
+docker-ctf is a Docker container that can be used as a lean VM replacement for hacking. It should be noted that, unlike VMs, the container runs on the kernel of the host system and is only isolated by namespaces and cgroups. This Docker container provides a Debian-based environment pre-configured with essential tools for penetration testing and ethical hacking.
 
-- [Metasploit](https://github.com/rapid7/metasploit-framework)
+### Features
 
-- [SearchSploit](https://gitlab.com/exploit-database/exploitdb)
+- Debian base image for stability and reliability
 
-- [gobuster](https://github.com/OJ/gobuster)
+- Pre-installed penetration testing tools, including:
 
-- [John the Ripper](https://github.com/openwall/john)
+	- [Metasploit](https://github.com/rapid7/metasploit-framework)
 
-- [peda](https://github.com/longld/peda)
+	- [SearchSploit](https://gitlab.com/exploit-database/exploitdb)
 
-- [pwntools](https://github.com/Gallopsled/pwntools)
+	- [gobuster](https://github.com/OJ/gobuster)
 
-- [radare2](https://github.com/radareorg/radare2)
+	- [John the Ripper](https://github.com/openwall/john)
 
-- [SecLists](https://github.com/danielmiessler/SecLists)
+	- [peda](https://github.com/longld/peda)
 
-- [sqlmap](https://github.com/sqlmapproject/sqlmap)
+	- [pwntools](https://github.com/Gallopsled/pwntools)
 
-- [WPScan](https://github.com/wpscanteam/wpscan)
+	- [radare2](https://github.com/radareorg/radare2)
 
+	- [SecLists](https://github.com/danielmiessler/SecLists)
 
-To get started, simply run build.py (the build can take up to 15-20 minutes, depending on the internet connection and hardware used) and start the container after the build with instantiate.py.
+	- [sqlmap](https://github.com/sqlmapproject/sqlmap)
+
+	- [WPScan](https://github.com/wpscanteam/wpscan)
+
+- Lightweight (compared to a VM) and optimized for rapid deployment
+
+- Easily customizable for additional tools or personal preferences
+
+### Usage
+
+1. Build the Docker image (the build can take up to 15-20 minutes)
+
+```shell
+python3 build.py
+```
+
+2. Run the container
+
+```shell
+python3 instantiate.py
+```
+
+3. Start using your favorite penetration testing tools!
+
+### Customization
+
+Feel free to customize the Dockerfile to include additional tools or configurations according to your specific needs.
