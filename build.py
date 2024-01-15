@@ -64,7 +64,7 @@ def main():
 	printBanner()
 
 	if platform.system() != 'Linux':
-		print(f'[{colors.RED}!{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} This Program only runs on Linux and MacOS hosts...')
+		print(f'[{colors.RED}!{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} This Program only runs on Linux hosts...')
 		print('')
 		time.sleep(1)
 		sys.exit()
