@@ -50,7 +50,6 @@ COPY wpscan /home/user/opt/wpscan
 COPY john /home/user/opt/john
 COPY peda /home/user/opt/peda
 COPY .bashrc /home/user/.bashrc
-COPY .vimrc /home/user/.vimrc
 
 RUN \
 	chown --recursive user:user ~user/opt/metasploit-framework && \
@@ -63,8 +62,7 @@ RUN \
 	chown --recursive user:user ~user/opt/wpscan && \
 	chown --recursive user:user ~user/opt/john && \
 	chown --recursive user:user ~user/opt/peda && \
-	chown user:user ~user/.bashrc && \
-	chown user:user ~user/.vimrc
+	chown user:user ~user/.bashrc
 
 USER user
 
@@ -107,6 +105,7 @@ WORKDIR /home/user/opt/gobuster
 RUN \
 	pip install --upgrade --editable /home/user/opt/pwntools --break-system-packages && \
 	export PATH=$PATH:/usr/local/go/bin && \
+	wget -P /home/dw0rsec/ https://raw.githubusercontent.com/dw0rsec/dotfiles/main/.vimrc && \
 	echo "source /home/user/opt/peda/peda.py" >> ~/.gdbinit && \
 	echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && \
 	export PATH=$PATH:/usr/local/go/bin && \
