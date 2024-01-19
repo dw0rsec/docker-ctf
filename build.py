@@ -40,6 +40,16 @@ def cloneRepos(repos, directoryPath):
 	for repoUrl in repos:
 		checkRepos(repoUrl, directoryPath)
 
+def checkGroup(username):
+	try:
+		groupsOutput = subprocess.check_output(['groups', username])
+		return 'docker' in groupsOutput.split()
+	except subprocess.CalledProcessError as e:
+		currentTime = datetime.now()
+		currentTime = currentTime.strftime('%H:%M:%S')
+		print(f'[{colors.RED}!{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Error checking groups for user {username}: {e}')
+		return False
+
 def printBanner():
 	print(f'''
      █████                   █████
@@ -57,6 +67,7 @@ def printBanner():
 def main():
 	os.chdir(os.path.dirname(os.path.realpath(__file__)))
 	directoryPath = "./"
+	username = os.getenv('USER')
 	namespace = 'user'
 	imageName = 'docker-ctf'
 	currentTime = datetime.now()
@@ -89,13 +100,21 @@ def main():
 
 	cloneRepos(repos, directoryPath)
 
-	dockerBuild = [
-		'sudo', '-g', 'docker',
-		'docker',
-		'build',
-		'-t', '{}/{}'.format(namespace, imageName),
-		'.'
-	]
+	if checkGroup(username):
+		dockerBuild = [
+			'docker',
+			'build',
+			'-t', '{}/{}'.format(namespace, imageName),
+			'.'
+		]
+	else:
+		dockerBuild = [
+			'sudo', '-g', 'docker',
+			'docker',
+			'build',
+			'-t', '{}/{}'.format(namespace, imageName),
+			'.'
+		]
 
 	currentTime = datetime.now()
 	currentTime = currentTime.strftime('%H:%M:%S')
