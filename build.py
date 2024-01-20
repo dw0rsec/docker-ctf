@@ -8,7 +8,7 @@ import time
 import sys
 import os
 
-class colors:
+class Colors:
 	PURPLE = '\033[95m'
 	YELLOW = '\033[93m'
 	GREEN = '\033[92m'
@@ -16,41 +16,41 @@ class colors:
 	RED = '\033[31m'
 	STD = '\033[0m'
 
-def runCommand(command, cwd=None):
+def run_command(command, cwd=None):
 	subprocess.call(command, cwd=cwd)
 
-def checkRepos(repoUrl, directoryPath):
-	repoName = repoUrl.split("/")[-1].replace(".git", "")
-	repoPath = os.path.join(directoryPath, repoName)
+def check_repos(repo_url, directory_path):
+	repo_name = repo_url.split("/")[-1].replace(".git", "")
+	repo_path = os.path.join(directory_path, repo_name)
 
-	if os.path.exists(repoPath):
-		currentTime = datetime.now()
-		currentTime = currentTime.strftime('%H:%M:%S')
-		print(f"[{colors.GREEN}*{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Repository already exists. Updating {repoName}...{colors.YELLOW}")
-		runCommand(["git", "pull"], cwd=repoPath)
-		print(f'{colors.STD}')
+	if os.path.exists(repo_path):
+		current_time = datetime.now()
+		current_time = current_time.strftime('%H:%M:%S')
+		print(f"[{Colors.GREEN}*{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Repository already exists. Updating {repo_name}...{Colors.YELLOW}")
+		run_command(["git", "pull"], cwd=repo_path)
+		print(f'{Colors.STD}')
 	else:
-		currentTime = datetime.now()
-		currentTime = currentTime.strftime('%H:%M:%S')
-		print(f'[{colors.RED}!{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Repository not found. Cloning {repoName}...{colors.YELLOW}')
-		runCommand(["git", "clone", repoUrl, repoPath])
-		print(f'{colors.STD}')
+		current_time = datetime.now()
+		current_time = current_time.strftime('%H:%M:%S')
+		print(f'[{Colors.RED}!{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Repository not found. Cloning {repo_name}...{Colors.YELLOW}')
+		run_command(["git", "clone", repo_url, repo_path])
+		print(f'{Colors.STD}')
 
-def cloneRepos(repos, directoryPath):
-	for repoUrl in repos:
-		checkRepos(repoUrl, directoryPath)
+def clone_repos(repos, directory_path):
+	for repo_url in repos:
+		check_repos(repo_url, directory_path)
 
-def checkGroup(username):
+def check_group(username):
 	try:
-		groupsOutput = subprocess.check_output(['groups', username])
-		return 'docker' in groupsOutput.split()
+		groups_output = subprocess.check_output(['groups', username])
+		return 'docker' in groups_output.split()
 	except subprocess.CalledProcessError as e:
-		currentTime = datetime.now()
-		currentTime = currentTime.strftime('%H:%M:%S')
-		print(f'[{colors.RED}!{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Error checking groups for user {username}: {e}')
+		current_time = datetime.now()
+		current_time = current_time.strftime('%H:%M:%S')
+		print(f'[{Colors.RED}!{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Error checking groups for user {username}: {e}')
 		return False
 
-def printBanner():
+def print_banner():
 	print(f'''
      █████                   █████
     ░░███                   ░░███
@@ -60,28 +60,28 @@ def printBanner():
 ░███ ░███ ░███ ░███░███  ███ ░███░░███ ░███░░░   ░███
 ░░████████░░██████ ░░██████  ████ █████░░██████  █████
  ░░░░░░░░  ░░░░░░   ░░░░░░  ░░░░ ░░░░░  ░░░░░░  ░░░░░
-{colors.PURPLE}                       FOR HACKERS{colors.STD}
+{Colors.PURPLE}                       FOR HACKERS{Colors.STD}
 
 ''')
 
 def main():
 	os.chdir(os.path.dirname(os.path.realpath(__file__)))
-	directoryPath = "./"
+	directory_path = "./"
 	username = os.getenv('USER')
 	namespace = 'user'
-	imageName = 'docker-ctf'
-	currentTime = datetime.now()
-	currentTime = currentTime.strftime('%H:%M:%S')
-	printBanner()
+	imagename = 'docker-ctf'
+	current_time = datetime.now()
+	current_time = current_time.strftime('%H:%M:%S')
+	print_banner()
 
 	if platform.system() != 'Linux':
-		print(f'[{colors.RED}!{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} This Program only runs on Linux hosts...')
+		print(f'[{Colors.RED}!{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} This Program only runs on Linux hosts...')
 		print('')
 		time.sleep(1)
 		sys.exit()
 	else:
-		print(f"[{colors.YELLOW}i{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Build will take around 15-20 mins.")
-		print(f"[{colors.YELLOW}i{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Checking for necessary repos...")
+		print(f"[{Colors.YELLOW}i{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Build will take around 15-20 mins.")
+		print(f"[{Colors.YELLOW}i{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Checking for necessary repos...")
 		time.sleep(1)
 
 	repos = [
@@ -98,31 +98,31 @@ def main():
 		'https://github.com/rbenv/ruby-build.git'
 	]
 
-	cloneRepos(repos, directoryPath)
+	clone_repos(repos, directory_path)
 
-	if checkGroup(username):
-		dockerBuild = [
+	if check_group(username):
+		docker_build = [
 			'docker',
 			'build',
-			'-t', '{}/{}'.format(namespace, imageName),
+			'-t', '{}/{}'.format(namespace, imagename),
 			'.'
 		]
 	else:
-		dockerBuild = [
+		docker_build = [
 			'sudo', '-g', 'docker',
 			'docker',
 			'build',
-			'-t', '{}/{}'.format(namespace, imageName),
+			'-t', '{}/{}'.format(namespace, imagename),
 			'.'
 		]
 
-	currentTime = datetime.now()
-	currentTime = currentTime.strftime('%H:%M:%S')
-	print(f"[{colors.YELLOW}i{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Building the Docker image...")
-	subprocess.call(dockerBuild)
-	currentTime = datetime.now()
-	currentTime = currentTime.strftime('%H:%M:%S')
-	print(f"[{colors.YELLOW}i{colors.STD}]{colors.BLUE}{currentTime}{colors.STD} Build complete. Run instantiate.py to start.")
+	current_time = datetime.now()
+	current_time = current_time.strftime('%H:%M:%S')
+	print(f"[{Colors.YELLOW}i{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Building the Docker image...")
+	subprocess.call(docker_build)
+	current_time = datetime.now()
+	current_time = current_time.strftime('%H:%M:%S')
+	print(f"[{Colors.YELLOW}i{Colors.STD}]{Colors.BLUE}{current_time}{Colors.STD} Build complete. Run instantiate.py to start.")
 
 if __name__ == '__main__':
 	main()
