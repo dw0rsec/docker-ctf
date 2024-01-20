@@ -3,9 +3,9 @@
 import subprocess
 
 namespace = 'user'
-imageName = 'docker-ctf'
+imagename = 'docker-ctf'
 
-dockerRun = [
+docker_run = [
 	'sudo', '-g', 'docker',
 	'docker',
 	'run',
@@ -13,4 +13,4 @@ dockerRun = [
 	'-it', '{}/{}'.format(namespace, imageName)
 ]
 
-subprocess.call(dockerRun)
+subprocess.call(docker_run)
